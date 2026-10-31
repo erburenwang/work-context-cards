@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17433a">
+  <meta name="description" content="Private, offline-first project handoff cards. Capture verified state, evidence, and one clear next step.">
+  <title data-i18n="page.title">Work Context Cards · Project handoffs</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content" data-i18n="skip">Skip to cards</a>
+  <header class="topbar">
+    <a class="brand" href="#top" data-i18n-aria-label="brand.aria">
+      <span class="brand-mark" aria-hidden="true">W</span>
+      <span data-i18n="brand.name">Work Context Cards</span>
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-subtitle" data-i18n="brand.subtitle">Project handoffs</span>
+    </a>
+    <div class="header-tools">
+      <p class="save-status" id="save-status" role="status" aria-live="polite" data-i18n="storage.loading">Loading local cards…</p>
+      <button class="button button-quiet" id="language-toggle" type="button" aria-pressed="false" data-i18n-aria-label="language.switchLabel">中文</button>
+      <button class="button button-quiet" id="export-button" type="button" data-i18n="action.export">Export backup</button>
+      <button class="button button-quiet" id="import-button" type="button" data-i18n="action.import">Import backup</button>
+      <input class="visually-hidden" id="import-file" type="file" accept="application/json,.json" data-i18n-aria-label="label.backupFile">
+      <button class="button button-primary" id="new-project-button" type="button"><span data-i18n="action.new">New card</span> <span aria-hidden="true">＋</span></button>
+    </div>
+  </header>
+
+  <main id="main-content" class="page-shell">
+    <section class="hero" id="top" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="hero.eyebrow">Leave a clear trail. Pick up work anywhere.</p>
+        <h1 id="page-title" data-i18n="hero.title">Open a project. Know what to do next.</h1>
+        <p class="hero-description" data-i18n="hero.description">Keep five useful details on each card: the goal, verified state, evidence, one next step, and boundaries. Turn them into a portable handoff for a new conversation or teammate.</p>
+      </div>
+      <div class="hero-note" data-i18n-aria-label="hero.note.aria">
+        <div class="note-number">01 <span>/ 05</span></div>
+        <p data-i18n="hero.note.one">No guessing about progress.</p>
+        <p data-i18n="hero.note.two">Carry forward what you checked, then verify it again when work resumes.</p>
+      </div>
+    </section>
+
+    <div class="privacy-strip">
+      <span class="privacy-dot" aria-hidden="true"></span>
+      <p><strong><span data-i18n="privacy.local">Local by default</span></strong><span data-i18n="privacy.body"> · No accounts, network requests, file scanning, or automatic actions. Cards stay in this browser; handoff text reflects the last saved check, so verify evidence before resuming.</span></p>
+    </div>
+
+    <section class="workspace" data-i18n-aria-label="workspace.aria">
+      <div class="library-column">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="library.eyebrow">Project memory</p>
+            <h2 data-i18n="library.title">Your cards</h2>
+          </div>
+          <div class="count-summary" aria-live="polite">
+            <span class="count-number" id="active-count">0</span>
+            <span data-i18n="library.activeSuffix">active</span>
+          </div>
+        </div>
+
+        <div class="list-controls">
+          <nav class="filter-list" id="filter-list" data-i18n-aria-label="filters.aria">
+            <button class="filter-button is-selected" type="button" data-filter="all" aria-pressed="true"><span data-i18n="filter.all">All</span> <span id="count-all">0</span></button>
+            <button class="filter-button" type="button" data-filter="active" aria-pressed="false"><span data-i18n="status.active">Active</span> <span id="count-active">0</span></button>
+            <button class="filter-button" type="button" data-filter="waiting" aria-pressed="false"><span data-i18n="status.waiting">Waiting</span> <span id="count-waiting">0</span></button>
+            <button class="filter-button" type="button" data-filter="paused" aria-pressed="false"><span data-i18n="status.paused">Paused</span> <span id="count-paused">0</span></button>
+            <button class="filter-button" type="button" data-filter="done" aria-pressed="false"><span data-i18n="status.done">Done</span> <span id="count-done">0</span></button>
+          </nav>
+          <div class="search-wrap">
+            <label for="project-search" data-i18n="search.label">Search cards</label>
+            <input id="project-search" type="search" data-i18n-placeholder="search.placeholder" placeholder="Name, status, or next step" autocomplete="off">
+          </div>
+        </div>
+
+        <div class="project-list" id="project-list"></div>
+      </div>
+
+      <aside class="side-column" data-i18n-aria-label="aside.aria">
+        <section class="side-card handoff-example">
+          <p class="eyebrow" data-i18n="panel.includes.eyebrow">Each handoff includes</p>
+          <h2 data-i18n="panel.includes.title">Enough context to continue, without copying the old conversation.</h2>
+          <ol class="handoff-parts">
+            <li><span>01</span> <span data-i18n="field.goal">Goal and done criteria</span></li>
+            <li><span>02</span> <span data-i18n="field.verifiedState">Last verified state</span></li>
+            <li><span>03</span> <span data-i18n="field.evidence">Evidence and sources</span></li>
+            <li><span>04</span> <span data-i18n="field.nextAction">One next step</span></li>
+            <li><span>05</span> <span data-i18n="field.boundaries">Boundaries and stop conditions</span></li>
+          </ol>
+          <p class="side-caption" data-i18n="panel.optional">Optional sections stay out when blank. The app never fills in facts for you.</p>
+        </section>
+        <section class="side-card safety-card">
+          <p class="eyebrow" data-i18n="panel.privacy.eyebrow">Keep evidence, not credentials</p>
+          <h2 data-i18n="panel.privacy.title">Write down what to check. Leave secrets out.</h2>
+          <p data-i18n="panel.privacy.body">File paths, conclusions, and open questions are useful. Do not store passwords, tokens, cookies, or private keys. Exported JSON backups are yours to protect.</p>
+          <button class="text-button" id="quick-guide-button" type="button"><span data-i18n="action.guide">How to start</span> <span aria-hidden="true">→</span></button>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="page-footer">
+    <span data-i18n="footer.version">Version 1.0</span>
+    <span data-i18n="footer.storage">Saved in this browser · Cards and backups are separate</span>
+  </footer>
+
+  <dialog class="modal" id="project-dialog" aria-labelledby="project-dialog-title">
+    <form id="project-form" novalidate>
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow" data-i18n="dialog.project.eyebrow">Project card</p>
+          <h2 id="project-dialog-title" data-i18n="dialog.project.create">New handoff card</h2>
+        </div>
+        <button class="close-button" type="button" data-close="project-dialog" data-i18n-aria-label="action.close">×</button>
+      </div>
+      <input id="project-id" name="id" type="hidden">
+      <div class="form-grid">
+        <div class="field field-wide">
+          <label for="project-name"><span data-i18n="field.name">Project name</span> <span class="required-mark" data-i18n="required">Required</span></label>
+          <input id="project-name" name="name" maxlength="100" required data-i18n-placeholder="placeholder.name" placeholder="e.g. A local tool in progress">
+        </div>
+        <div class="field">
+          <label for="project-area"><span data-i18n="field.area">Area</span> <span class="optional-mark" data-i18n="optional">Optional</span></label>
+          <input id="project-area" name="area" maxlength="50" data-i18n-placeholder="placeholder.area" placeholder="Study, writing, software…">
+        </div>
+        <div class="field">
+          <label for="project-status" data-i18n="field.status">Current status</label>
+          <select id="project-status" name="status">
+            <option value="active" data-i18n="status.active">Active</option>
+            <option value="waiting" data-i18n="status.waiting">Waiting</option>
+            <option value="paused" data-i18n="status.paused">Paused</option>
+            <option value="done" data-i18n="status.done">Done</option>
+          </select>
+        </div>
+        <div class="field field-wide">
+          <label for="project-goal"><span data-i18n="field.goal.label">Goal and done criteria</span> <span class="required-mark" data-i18n="required">Required</span></label>
+          <textarea id="project-goal" name="goal" rows="3" maxlength="1200" required data-i18n-placeholder="placeholder.goal" placeholder="What result do you want? What will count as done?"></textarea>
+        </div>
+        <div class="field field-wide">
+          <label for="project-state"><span data-i18n="field.verified.label">Last verified state</span> <span class="required-mark" data-i18n="required">Required</span></label>
+          <textarea id="project-state" name="verifiedState" rows="3" maxlength="2400" required data-i18n-placeholder="placeholder.verified" placeholder="Write confirmed facts only. Mark unknowns as unknown."></textarea>
+        </div>
+        <div class="field field-wide">
+          <label for="project-evidence"><span data-i18n="field.evidence.label">Evidence and sources</span> <span class="optional-mark" data-i18n="optional">Optional</span></label>
+          <textarea id="project-evidence" name="evidence" rows="2" maxlength="1600" data-i18n-placeholder="placeholder.evidence" placeholder="File path, screenshot, or link, and what it confirms."></textarea>
+        </div>
+        <div class="field field-wide">
+          <label for="project-next"><span data-i18n="field.next.label">One next step</span> <span class="required-mark" data-i18n="required">Required</span></label>
+          <textarea id="project-next" name="nextAction" rows="2" maxlength="1000" required data-i18n-placeholder="placeholder.next" placeholder="Name one action that can be completed and checked."></textarea>
+        </div>
+        <div class="field field-wide">
+          <label for="project-boundaries"><span data-i18n="field.boundaries.label">Boundaries and stop conditions</span> <span class="optional-mark" data-i18n="optional">Optional</span></label>
+          <textarea id="project-boundaries" name="boundaries" rows="2" maxlength="1600" data-i18n-placeholder="placeholder.boundaries" placeholder="e.g. Do not publish or sign in; stop if payment is requested."></textarea>
+        </div>
+      </div>
+      <p class="form-error" id="form-error" role="alert" tabindex="-1" hidden></p>
+      <div class="modal-actions">
+        <button class="button button-quiet" type="button" data-close="project-dialog" data-i18n="action.cancel">Cancel</button>
+        <button class="button button-primary" type="submit" data-i18n="action.save">Save card</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal handoff-modal" id="handoff-dialog" aria-labelledby="handoff-dialog-title">
+    <div class="modal-header">
+      <div>
+        <p class="eyebrow" data-i18n="dialog.handoff.eyebrow">Take it to another chat or teammate</p>
+        <h2 id="handoff-dialog-title" data-i18n="dialog.handoff.title">Project handoff</h2>
+      </div>
+      <button class="close-button" type="button" data-close="handoff-dialog" data-i18n-aria-label="action.close">×</button>
+    </div>
+    <p class="modal-intro" data-i18n="dialog.handoff.intro">This handoff uses the card’s latest notes. Review it first, then copy or download it. Verify the evidence before continuing.</p>
+    <label class="visually-hidden" for="handoff-text" data-i18n="dialog.handoff.label">Generated project handoff</label>
+    <textarea id="handoff-text" class="handoff-text" rows="17" readonly spellcheck="false"></textarea>
+    <p class="form-hint" id="handoff-status" role="status" aria-live="polite"></p>
+    <div class="modal-actions modal-actions-split">
+      <button class="button button-quiet" type="button" id="download-handoff-button" data-i18n="action.downloadMarkdown">Download Markdown</button>
+      <div class="action-group">
+        <button class="button button-quiet" type="button" data-close="handoff-dialog" data-i18n="action.close">Close</button>
+        <button class="button button-primary" type="button" id="copy-handoff-button" data-i18n="action.copyHandoff">Copy handoff</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="modal guide-modal" id="guide-dialog" aria-labelledby="guide-dialog-title">
+    <div class="modal-header">
+      <div>
+        <p class="eyebrow" data-i18n="dialog.guide.eyebrow">Start in 30 seconds</p>
+        <h2 id="guide-dialog-title" data-i18n="dialog.guide.title">Write these five things</h2>
+      </div>
+      <button class="close-button" type="button" data-close="guide-dialog" data-i18n-aria-label="action.close">×</button>
+    </div>
+    <ol class="guide-list">
+      <li><strong data-i18n="guide.goal">What are we trying to finish?</strong></li>
+      <li><strong data-i18n="guide.state">What have I checked myself?</strong></li>
+      <li><strong data-i18n="guide.evidence">Where can the next person verify it?</strong></li>
+      <li><strong data-i18n="guide.next">What is the single next action?</strong></li>
+      <li><strong data-i18n="guide.boundaries">What should not happen without approval?</strong></li>
+    </ol>
+    <p class="guide-note" data-i18n="guide.note">Save a card, choose “Make handoff”, review it, then paste it into any new AI chat or share it with a teammate. Export JSON to move cards to another browser or keep a backup.</p>
+    <div class="modal-actions">
+      <button class="button button-primary" type="button" data-close="guide-dialog" data-i18n="action.gotIt">Got it</button>
+    </div>
+  </dialog>
+
+  <div class="visually-hidden" id="announcement" role="status" aria-live="polite" aria-atomic="true"></div>
+  <script src="locales.js"></script>
+  <script src="model.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "work-context-cards",
+  "version": "1.0.0",
+  "private": false,
+  "description": "Offline-first, bilingual project handoff cards that keep verified state and next steps portable.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check app.js && node --check locales.js && node --check model.js"
+  }
+}
